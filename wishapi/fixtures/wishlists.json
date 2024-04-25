@@ -1,0 +1,92 @@
+[
+  {
+    "model": "wishapi.wishlist",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "title": "My Birthday 40th birthday",
+      "description": "I am turning 40! Here are a few things I like",
+      "spoil_surprises": true,
+      "private": false,
+      "address": "123 Main Street, Aurora Springs, CA 90210",
+      "creation_date": "2024-04-26T08:00:00Z",
+      "date_of_event": "2024-05-10T08:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "title": "Tech Gadgets Wishlist",
+      "description": "The latest gadgets and gizmos I've been eyeing!",
+      "spoil_surprises": false,
+      "private": true,
+      "address": "456 Elm Street, New York, NY 10001",
+      "creation_date": "2024-04-27T08:00:00Z",
+      "date_of_event": "2024-06-15T08:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 3,
+    "fields": {
+      "user": 2,
+      "title": "Meg and Ryan's Wedding",
+      "description": "We are broke college students. Anything you can contribute would greatly appreciated!",
+      "spoil_surprises": true,
+      "private": false,
+      "address": "789 Oak Street, Silverwood, TX 75001",
+      "creation_date": "2024-04-26T08:00:00Z",
+      "date_of_event": "2024-05-10T08:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 4,
+    "fields": {
+      "user": 2,
+      "title": "Outdoor Adventure Wishlist",
+      "description": "Gear and equipment for epic outdoor adventures!",
+      "spoil_surprises": false,
+      "private": true,
+      "address": "101 Pine Street, Sunnydale, FL 33001",
+      "creation_date": "2024-04-27T08:00:00Z",
+      "date_of_event": "2024-06-15T08:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 5,
+    "fields": {
+      "user": 3,
+      "title": "Jenna's Housewarming Party",
+      "description": "Items to spruce up my living space and make it cozy!",
+      "spoil_surprises": true,
+      "private": false,
+      "address": "202 Maple Street, Seattle, WA 98001",
+      "creation_date": "2024-04-26T08:00:00Z",
+      "date_of_event": "2024-05-10T08:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 6,
+    "fields": {
+      "user": 3,
+      "title": "Bookworm's Wishlist",
+      "description": "Books I've been dying to read!",
+      "spoil_surprises": false,
+      "private": true,
+      "address": "303 Cherry Street, Chicago, IL 60001",
+      "creation_date": "2024-04-27T08:00:00Z",
+      "date_of_event": "2024-06-15T08:00:00Z",
+      "pinned": false
+    }
+  }
+]

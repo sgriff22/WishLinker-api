@@ -1,0 +1,30 @@
+[
+  {
+    "model": "wishapi.priority",
+    "pk": 1,
+    "fields": {
+      "name": "Must-Have"
+    }
+  },
+  {
+    "model": "wishapi.priority",
+    "pk": 2,
+    "fields": {
+      "name": "High Priority"
+    }
+  },
+  {
+    "model": "wishapi.priority",
+    "pk": 3,
+    "fields": {
+      "name": "Medium Priority"
+    }
+  },
+  {
+    "model": "wishapi.priority",
+    "pk": 4,
+    "fields": {
+      "name": "Low Priority"
+    }
+  }
+]
