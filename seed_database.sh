@@ -7,4 +7,6 @@ python3 manage.py makemigrations wishapi
 python3 manage.py migrate wishapi
 python3 manage.py loaddata users
 python3 manage.py loaddata tokens
-
+python3 manage.py loaddata wishlists
+python3 manage.py loaddata priorities
+python3 manage.py loaddata wishlist_items

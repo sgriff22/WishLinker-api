@@ -1,0 +1,106 @@
+[
+  {
+    "model": "wishapi.wishlistitem",
+    "pk": 1,
+    "fields": {
+      "wishlist": 1,
+      "name": "Portable Espresso Maker",
+      "note": "Preferably in red color; with a sleek design",
+      "website_url": "https://www.amazon.com/Minipresso-Portable-Espresso-Compatible-Manually/dp/B00VTA9F6U/ref=sr_1_2_sspa?dib=eyJ2IjoiMSJ9.YwUMDQDZQFoNOEtk2iAQHyxl5ryMvWwsjVN6NVGa7-sKfv5jhbVW8MB0X_vgYf84AoXQNAoTpDD8--6ssHb-JA8ct0Yt8uAnIySJrbQdhlk5g3RwaDTrEqoJ0CSLdX9cZuPvpdyknGvQp8sb1LKVda4iU0fsMm5OSsC6ARewqi6cNSo-esoTwDscs5-CJZJhaPEVmytRp7go2SfkkPD2LXyviV6vCbP6oDuvyoLl_A1t45ZG-N1P0gR-92MTFKC66ariZxJvZB4Mjfmsi7dlmcUrIDtZ0d55XxtczC_QnPw.7ofluAMDRcYlazmZnAmo9iueXtfNqA6nNBcOlBURsyU&dib_tag=se&hvadid=557264626784&hvdev=c&hvlocphy=9013137&hvnetw=g&hvqmt=e&hvrand=9871293913452938991&hvtargid=kwd-400415586212&hydadcr=4919_13166229&keywords=espresso+on+the+go+machine&qid=1714074520&sr=8-2-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1",
+      "quantity": 2,
+      "priority": 1,
+      "creation_date": "2024-04-26T08:00:00Z"
+    }
+  },
+  {
+    "model": "wishapi.wishlistitem",
+    "pk": 2,
+    "fields": {
+      "wishlist": 1,
+      "name": "Leatherbound Journals",
+      "note": "Plain, classic design; preferably with lined pages",
+      "website_url": "https://www.amazon.com/FOCUS-DAY-Notebooks-Hardcover-Multicolor/dp/B0CKSDF4GJ/ref=sr_1_9?crid=RYOHD217TFR6&dib=eyJ2IjoiMSJ9.dJECXHOwnr0gQcbiV7_JzR96bZvi9HZIh6FCPvKbB6dzsneoIZ9RpTdpU4yGZNZ59h4VgBhGzQxKDwT6inhOp7_n-WfTj9ddctu3D54u8Wt4bX7G3iSbnW99j1G7sARcwwo1bbyHM17EUlRJCcvxH4KTcH6o5qU-oAP6QVG2ar8UoTYefjKmx8aoxEnt5WzMFF0ggdeqHj0bJ7tgivNTtr5iq8dIh1mEl_TcD7ZyDxZ3WmtzKvrablHsAvWtSCpld08e00r7dQ53_ju22gqZHgWmZ8EUg0pJnyZVFnyZqi8.pf5UI6c-p25X2_NW7_Zh-jy8K4_29RfiPADpiVE7F6w&dib_tag=se&keywords=Leather-bound+Journal+Set&qid=1714074619&sprefix=leather-bound+journal+set%2Caps%2C133&sr=8-9",
+      "quantity": 2,
+      "priority": 4,
+      "creation_date": "2024-04-27T08:00:00Z"
+    }
+  },
+  {
+    "model": "wishapi.wishlistitem",
+    "pk": 3,
+    "fields": {
+      "wishlist": 2,
+      "name": "Apple iPhone 15",
+      "note": "I want the blue 128gb one",
+      "website_url": "https://www.apple.com/iphone-15/?afid=p238%7Cs0lQl9YFh-dc_mtid_20925d2q39172_pcrid_696385219912_pgrid_154285224238_pntwk_g_pchan__pexid__&cid=wwa-us-kwgo-iphone--slid---Brand-iPhone15-iPhone15Test4/12-",
+      "quantity": 1,
+      "priority": 2,
+      "creation_date": "2024-04-26T08:00:00Z"
+    }
+  },
+  {
+    "model": "wishapi.wishlistitem",
+    "pk": 4,
+    "fields": {
+      "wishlist": 2,
+      "name": "DJI - Avata Drone",
+      "note": "No plan",
+      "website_url": "https://www.bestbuy.com/site/dji-avata-explorer-combo-drone-with-motion-controller-goggles-integra-and-rc-motion-2-gray/6540209.p?skuId=6540209",
+      "quantity": 1,
+      "priority": 3,
+      "creation_date": "2024-04-27T08:00:00Z"
+    }
+  },
+  {
+    "model": "wishapi.wishlistitem",
+    "pk": 5,
+    "fields": {
+      "wishlist": 3,
+      "name": "KitchenAid Stand Mixer",
+      "note": "Preferably the Contour Silver color",
+      "website_url": "https://www.kitchenaid.com/refurbished/stand-mixers-and-attachments/p.refurbished-artisan-series-5-quart-tilt-head-stand-mixer.rrk150cu.html?region_id=LDC822&productcategory=refurbished-attachments&cmp=kad:wp_sda%7C01%7C00371%7Czz%7Csh%7Ct02%7Cp79%7Czz%7Cv04_kasa_ppc:ga:ps:txt:txt:cpc:shop_smartshop_refurbrob:na:na:20427281698::c&gad_source=1&gclid=Cj0KCQjw_qexBhCoARIsAFgBletzd1CTmWJCXTpx8jelGrcjcRbgB3DDM-B81Pycgu9XXM7Ht_ik9EEaAo5YEALw_wcB&gclsrc=aw.ds",
+      "quantity": 1,
+      "priority": 1,
+      "creation_date": "2024-04-26T08:00:00Z"
+    }
+  },
+  {
+    "model": "wishapi.wishlistitem",
+    "pk": 6,
+    "fields": {
+      "wishlist": 3,
+      "name": "Mills Waffle Bedspread and Pillow Sham Set - Levtex Home",
+      "note": "King size in grey",
+      "website_url": "https://www.target.com/p/mills-waffle-quilt-and-pillow-sham-set-levtex-home/-/A-83765488",
+      "quantity": 1,
+      "priority": 2,
+      "creation_date": "2024-04-27T08:00:00Z"
+    }
+  },
+  {
+    "model": "wishapi.wishlistitem",
+    "pk": 7,
+    "fields": {
+      "wishlist": 5,
+      "name": "Indoor Herb Garden Kit",
+      "note": "Any Hydroponic growing system would work just added link for reference",
+      "website_url": "https://www.amazon.com/Indoor-Garden-Hydroponic-Growing-System/dp/B0B6BB4TVC/ref=sr_1_5?dib=eyJ2IjoiMSJ9.rWfsQ0tnbjXufCA1e3Lw1ZYCdMKT_D95vYd5_ftBuEdTZoqqOfdn1ulWwlRJYVHSXjjI9tUB7IS7OL2faLM-FIuDhGp58GYfW99hnMz6c2CGnybFsJErZhqg252yeJ0v_XDexY5H1tg4CMB7OHCcUeDa7QDGzA5k1kvfMVTpaGPSg1VYO8E8fzIjxAvUontwRLfPzAaRxGiL4mRzk-jnwJeqt-udPoRYDHe9enUYuGTAxf3_W67gSQXtTptOYBUlIG7VWm5T93jBYO7ouS-C764MpmNZln88GoOBUHnhDn0.4Bkrz83wWK5VWx9qZXJkf7H9keUMOQxIplpL_o4OEiw&dib_tag=se&hvadid=616929563710&hvdev=c&hvlocphy=9013137&hvnetw=g&hvqmt=e&hvrand=8937914949436680405&hvtargid=kwd-482477487&hydadcr=15279_13597141&keywords=indoor+herb+garden+kit&qid=1714075493&sr=8-5",
+      "quantity": 2,
+      "priority": 1,
+      "creation_date": "2024-04-26T08:00:00Z"
+    }
+  },
+  {
+    "model": "wishapi.wishlistitem",
+    "pk": 8,
+    "fields": {
+      "wishlist": 5,
+      "name": "Decorative Throw Pillow Covers",
+      "note": "Color Cream/Tan",
+      "website_url": "https://www.target.com/p/18-34-x18-34-color-block-decorative-pillow-cover-cream-tan-hearth-38-hand-8482-with-magnolia/-/A-88503567?sid=&ref=tgt_adv_xsp&AFID=google&fndsrc=tgtao&DFA=71700000012510694&CPNG=PLA_Bedding%2BShopping%7CBedding_Ecomm_Home&adgroup=SC_Domestics&LID=700000001170770pgs&LNM=PRODUCT_GROUP&network=g&device=c&location=9013137&targetid=pla-1677525421641&ds_rl=1246978&ds_rl=1247068&gad_source=1&gclid=Cj0KCQjw_qexBhCoARIsAFgBlesBrFpZGOt_nGxuX7dWopkSBb4AWEma41J0VLOiPOUDxLGuUpQCqFgaArliEALw_wcB&gclsrc=aw.ds&preselect=88503567",
+      "quantity": 4,
+      "priority": 2,
+      "creation_date": "2024-04-27T08:00:00Z"
+    }
+  }
+]
