@@ -62,8 +62,6 @@ class WishlistViewSet(viewsets.ViewSet):
         @apiHeaderExample {String} Authorization
             Token 9ba45f09651c5b0c404f37a2d2572c026c146611
 
-        @apiParam {id} payment_id Query param to filter by payment used
-
         @apiSuccess (200) {Object[]} public_wishlists Array of public wishlist objects
         @apiSuccess (200) {id} public_wishlists.id Wishlist id
         @apiSuccess (200) {Number} public_wishlists.user User id associated with the wishlist
@@ -244,9 +242,36 @@ class WishlistViewSet(viewsets.ViewSet):
         """
 
         try:
+            # Retrieve the wishlist object
             wishlist = Wishlist.objects.get(pk=pk)
-            serializer = WishlistSerializer(wishlist, context={"request": request})
-            return Response(serializer.data)
+
+            # Retrieve all items associated with the wishlist
+            queryset = wishlist.items_in_list.all()
+            search_text = request.query_params.get("q", None)
+            priority_level = request.query_params.get("priority_level", None)
+
+            # Apply filters based on search text and priority level
+            if search_text:
+                queryset = queryset.filter(Q(name__icontains=search_text))
+            if priority_level:
+                queryset = queryset.filter(priority__name=priority_level)
+
+            # Serialize the wishlist object
+            wishlist_serializer = WishlistSerializer(
+                wishlist, context={"request": request}
+            )
+            wishlist_data = wishlist_serializer.data
+
+            # Serialize the filtered items
+            items_serializer = WishlistItemSerializer(
+                queryset, many=True, context={"request": request}
+            )
+            items_data = items_serializer.data
+
+            # Combine wishlist data with filtered items data
+            wishlist_data["wishlist_items"] = items_data
+
+            return Response(wishlist_data)
 
         except Wishlist.DoesNotExist:
             return Response(
