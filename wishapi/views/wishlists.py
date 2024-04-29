@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from wishapi.models import Wishlist, WishlistItem, Priority
 from django.http import HttpResponseServerError
 from django.db.models import Q
+from wishapi.views import UserSerializer
 
 
 class WishlistItemSerializer(serializers.ModelSerializer):
@@ -32,6 +33,7 @@ class WishlistSerializer(serializers.ModelSerializer):
     """JSON serializer for public wishlists"""
 
     wishlist_items = WishlistItemSerializer(many=True, source="items_in_list")
+    user = UserSerializer() 
 
     class Meta:
         model = Wishlist
