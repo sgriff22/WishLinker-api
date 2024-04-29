@@ -10,3 +10,4 @@ python3 manage.py loaddata tokens
 python3 manage.py loaddata wishlists
 python3 manage.py loaddata priorities
 python3 manage.py loaddata wishlist_items
+python3 manage.py loaddata friends

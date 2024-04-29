@@ -1,0 +1,65 @@
+[
+  {
+    "model": "wishapi.friend",
+    "pk": 1,
+    "fields": {
+      "user1_id": 1,
+      "user2_id": 2,
+      "accepted": true
+    }
+  },
+  {
+    "model": "wishapi.friend",
+    "pk": 2,
+    "fields": {
+      "user1_id": 2,
+      "user2_id": 3,
+      "accepted": false
+    }
+  },
+  {
+    "model": "wishapi.friend",
+    "pk": 3,
+    "fields": {
+      "user1_id": 3,
+      "user2_id": 1,
+      "accepted": true
+    }
+  },
+  {
+    "model": "wishapi.friend",
+    "pk": 4,
+    "fields": {
+      "user1_id": 4,
+      "user2_id": 2,
+      "accepted": false
+    }
+  },
+  {
+    "model": "wishapi.friend",
+    "pk": 5,
+    "fields": {
+      "user1_id": 4,
+      "user2_id": 5,
+      "accepted": true
+    }
+  },
+  {
+    "model": "wishapi.friend",
+    "pk": 6,
+    "fields": {
+      "user1_id": 1,
+      "user2_id": 6,
+      "accepted": true
+    }
+  },
+  {
+    "model": "wishapi.friend",
+    "pk": 7,
+    "fields": {
+      "user1_id": 3,
+      "user2_id": 5,
+      "accepted": true
+    }
+  }
+]
