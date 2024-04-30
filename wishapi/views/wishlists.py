@@ -33,7 +33,7 @@ class WishlistSerializer(serializers.ModelSerializer):
     """JSON serializer for public wishlists"""
 
     wishlist_items = WishlistItemSerializer(many=True, source="items_in_list")
-    user = UserSerializer() 
+    user = UserSerializer()
 
     class Meta:
         model = Wishlist
@@ -47,6 +47,7 @@ class WishlistSerializer(serializers.ModelSerializer):
             "creation_date",
             "date_of_event",
             "pinned",
+            "private",
             "wishlist_items",
         )
 
@@ -285,3 +286,71 @@ class WishlistViewSet(viewsets.ViewSet):
 
         except Exception as ex:
             return HttpResponseServerError(ex)
+
+    def create(self, request):
+        """
+        Create a new wishlist.
+
+        @api {POST} wishlists/ Create Wishlist
+        @apiName CreateWishlist
+        @apiGroup Wishlists
+
+        @apiHeader {String} Authorization Auth token
+        @apiHeaderExample {String} Authorization:
+            Token d74b97fbe905134520bb236b0016703f50380dcf
+
+        @apiParam {String} title Wishlist title.
+        @apiParam {String} description Wishlist description.
+        @apiParam {Boolean} spoil_surprises Indicates if surprises should be spoiled.
+        @apiParam {Boolean} private Indicates if the wishlist is private.
+        @apiParam {String} date_of_event (Optional) Date of the event associated with the wishlist (ISO 8601 format).
+        @apiParam {String} address (Optional) Wishlist address.
+
+        @apiSuccess {Number} id Wishlist ID.
+        @apiSuccess {Number} user User ID.
+        @apiSuccess {String} title Wishlist title.
+        @apiSuccess {String} description Wishlist description.
+        @apiSuccess {Boolean} spoil_surprises Indicates if surprises should be spoiled.
+        @apiSuccess {String} address Wishlist address.
+        @apiSuccess {String} creation_date Date the wishlist was created (ISO 8601 format).
+        @apiSuccess {String} date_of_event Date of the event associated with the wishlist (ISO 8601 format).
+        @apiSuccess {Boolean} pinned Indicates if the wishlist is pinned.
+        @apiSuccess {Object[]} wishlist_items Array of wishlist items associated with the wishlist
+
+        @apiSuccessExample {json} Success:
+            HTTP/1.1 201 Created
+        {
+            "id": 1,
+            "user": 1,
+            "title": "My Birthday 40th birthday",
+            "description": "I am turning 40! Here are a few things I like",
+            "spoil_surprises": true,
+            "address": "123 Main Street, Aurora Springs, CA 90210",
+            "creation_date": "2024-04-26T08:00:00Z",
+            "date_of_event": "2024-05-10T08:00:00Z",
+            "pinned": false,
+            "wishlist_items": []
+        }
+        """
+
+        new_list = Wishlist()
+        # Get the data from the client's JSON payload
+        new_list.title = request.data.get("title")
+        new_list.description = request.data.get("description")
+        new_list.spoil_surprises = request.data.get("spoil_surprises")
+        new_list.private = request.data.get("private")
+        new_list.date_of_event = request.data.get("date_of_event")
+        new_list.address = request.data.get("address")
+
+        user = request.auth.user
+        new_list.user = user
+
+        try:
+
+            new_list.save()
+
+            serializer = WishlistSerializer(new_list, context={"request": request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Exception as ex:
+            return Response({"reason": ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
