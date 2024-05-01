@@ -25,7 +25,7 @@
       "private": true,
       "address": "456 Elm Street, New York, NY 10001",
       "creation_date": "2024-04-27T08:00:00Z",
-      "date_of_event": "2024-06-15T08:00:00Z",
+      "date_of_event": null,
       "pinned": false
     }
   },
@@ -55,7 +55,7 @@
       "private": true,
       "address": "101 Pine Street, Sunnydale, FL 33001",
       "creation_date": "2024-04-27T08:00:00Z",
-      "date_of_event": "2024-06-15T08:00:00Z",
+      "date_of_event": null,
       "pinned": false
     }
   },
@@ -85,7 +85,7 @@
       "private": true,
       "address": "303 Cherry Street, Chicago, IL 60001",
       "creation_date": "2024-04-27T08:00:00Z",
-      "date_of_event": "2024-06-15T08:00:00Z",
+      "date_of_event": null,
       "pinned": false
     }
   }
