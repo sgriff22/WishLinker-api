@@ -139,6 +139,17 @@ class ProfileViewSet(viewsets.ViewSet):
             friends = Friend.objects.filter(
                 Q(user1_id=user.id) | Q(user2_id=user.id), accepted=True
             )
+
+            # Filter friends by name if search query is provided
+            search_query = request.query_params.get("q", None)
+            if search_query:
+                friends = friends.filter(
+                    Q(user1__first_name__icontains=search_query)
+                    | Q(user1__last_name__icontains=search_query)
+                    | Q(user2__first_name__icontains=search_query)
+                    | Q(user2__last_name__icontains=search_query)
+                )
+
             friend_serializer = FriendSerializer(
                 friends, many=True, context={"request": request}
             )
