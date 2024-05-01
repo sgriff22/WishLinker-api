@@ -143,6 +143,18 @@ class ProfileViewSet(viewsets.ViewSet):
                 friends, many=True, context={"request": request}
             )
 
+            # Retrieve friend requests associated with the user
+            friend_requests = Friend.objects.filter(
+                Q(user1_id=user.id) | Q(user2_id=user.id), accepted=False
+            )
+            friend_request_serializer = FriendSerializer(
+                friend_requests,
+                many=True,
+                context={
+                    "request": request,
+                },
+            )
+
             user_serializer = UserSerializer(user)
 
             # Combine all serialized data into a single response
@@ -150,6 +162,7 @@ class ProfileViewSet(viewsets.ViewSet):
                 "user": user_serializer.data,
                 "wishlists": wishlist_serializer.data,
                 "friends": friend_serializer.data,
+                "friend_requests": friend_request_serializer.data,
             }
 
             return Response(response_data)
