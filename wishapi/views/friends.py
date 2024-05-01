@@ -41,3 +41,25 @@ class FriendViewSet(viewsets.ViewSet):
         friend.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    def destroy(self, request, pk=None):
+        """
+        @api {DELETE} /friends/:id DELETE friend instance
+        @apiName UnFriend
+        @apiGroup Friends
+
+        @apiParam {Number} id Friend's ID (route parameter) to delete
+        @apiSuccessExample {json} Success
+            HTTP/1.1 204 No Content
+        """
+
+        try:
+            friend = Friend.objects.get(pk=pk)
+        except Friend.DoesNotExist:
+            return Response(
+                "Friend instance not found", status=status.HTTP_404_NOT_FOUND
+            )
+
+        friend.delete()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
