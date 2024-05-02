@@ -89,3 +89,31 @@ class WishlistItemViewSet(viewsets.ViewSet):
 
         except Exception as ex:
             return Response({"reason": ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk=None):
+        """
+        @api {DELETE} /wishlist_items/:id DELETE wishlist instance
+        @apiName DeleteWishlistItem
+        @apiGroup WishlistItems
+
+        @apiParam {Number} id WishlistItem ID (route parameter) to delete
+        @apiSuccessExample {json} Success
+            HTTP/1.1 204 No Content
+        """
+        try:
+            item = WishlistItem.objects.get(pk=pk)
+        except Wishlist.DoesNotExist:
+            return Response("Item instance not found", status=status.HTTP_404_NOT_FOUND)
+
+        wishlist = Wishlist.objects.get(pk=item.wishlist_id)
+
+        # Check if the authenticated user is the owner of the wishlist
+        if wishlist.user != request.user:
+            return Response(
+                "You are not authorized to delete this wishlist",
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        item.delete()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
