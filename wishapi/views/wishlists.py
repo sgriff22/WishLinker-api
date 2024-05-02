@@ -55,6 +55,7 @@ class WishlistSerializer(serializers.ModelSerializer):
 
 class WishlistViewSet(viewsets.ViewSet):
     """View for interacting with user wishlists"""
+
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
@@ -373,14 +374,95 @@ class WishlistViewSet(viewsets.ViewSet):
             return Response(
                 "Wishlist instance not found", status=status.HTTP_404_NOT_FOUND
             )
-        
+
         # Check if the authenticated user is the owner of the wishlist
         if wishlist.user != request.user:
             return Response(
                 "You are not authorized to delete this wishlist",
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         wishlist.delete()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    def update(self, request, pk=None):
+        """
+        Update a wishlist.
+
+        @api {PUT} wishlists/:id Update Wishlist
+        @apiName UpdateWishlist
+        @apiGroup Wishlists
+
+        @apiHeader {String} Authorization Auth token
+        @apiHeaderExample {String} Authorization:
+            Token d74b97fbe905134520bb236b0016703f50380dcf
+
+        @apiParam {Number} pk Wishlist's unique ID.
+        @apiParam {String} title Wishlist title.
+        @apiParam {String} description Wishlist description.
+        @apiParam {Boolean} spoil_surprises Indicates if surprises should be spoiled.
+        @apiParam {Boolean} private Indicates if the wishlist is private.
+        @apiParam {String} date_of_event (Optional) Date of the event associated with the wishlist (ISO 8601 format).
+        @apiParam {String} address (Optional) Wishlist address.
+
+        @apiSuccess {Number} id Wishlist ID.
+        @apiSuccess {Number} user User ID.
+        @apiSuccess {String} title Wishlist title.
+        @apiSuccess {String} description Wishlist description.
+        @apiSuccess {Boolean} spoil_surprises Indicates if surprises should be spoiled.
+        @apiSuccess {String} address Wishlist address.
+        @apiSuccess {String} creation_date Date the wishlist was created (ISO 8601 format).
+        @apiSuccess {String} date_of_event Date of the event associated with the wishlist (ISO 8601 format).
+        @apiSuccess {Boolean} pinned Indicates if the wishlist is pinned.
+        @apiSuccess {Object[]} wishlist_items Array of wishlist items associated with the wishlist
+
+        @apiSuccessExample {json} Success:
+            HTTP/1.1 200 OK
+        {
+            "id": 1,
+            "user": 1,
+            "title": "Updated Wishlist Title",
+            "description": "Updated wishlist description",
+            "spoil_surprises": false,
+            "address": "123 Main Street, Aurora Springs, CA 90210",
+            "creation_date": "2024-04-26T08:00:00Z",
+            "date_of_event": "2024-05-10T08:00:00Z",
+            "pinned": false,
+            "wishlist_items": []
+        }
+        """
+
+        try:
+            # Retrieve the wishlist object
+            wishlist = Wishlist.objects.get(pk=pk)
+
+            # Check if the authenticated user is the owner of the wishlist
+            if wishlist.user != request.user:
+                return Response(
+                    "You are not authorized to update this wishlist",
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
+            # Update wishlist fields based on request data
+            wishlist.title = request.data.get("title")
+            wishlist.description = request.data.get("description")
+            wishlist.spoil_surprises = request.data.get("spoil_surprises")
+            wishlist.private = request.data.get("private")
+            wishlist.date_of_event = request.data.get("date_of_event")
+            wishlist.address = request.data.get("address")
+
+            # Save the updated wishlist
+            wishlist.save()
+
+            # Serialize the updated wishlist and return the response
+            serializer = WishlistSerializer(wishlist, context={"request": request})
+            return Response(serializer.data)
+
+        except Wishlist.DoesNotExist:
+            return Response(
+                "Wishlist instance not found", status=status.HTTP_404_NOT_FOUND
+            )
+
+        except Exception as ex:
+            return HttpResponseServerError(ex)
