@@ -6,6 +6,7 @@ from wishapi.models import Wishlist, WishlistItem, Priority
 from django.http import HttpResponseServerError
 from django.db.models import Q
 from wishapi.views import UserSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 class WishlistItemSerializer(serializers.ModelSerializer):
@@ -54,6 +55,7 @@ class WishlistSerializer(serializers.ModelSerializer):
 
 class WishlistViewSet(viewsets.ViewSet):
     """View for interacting with user wishlists"""
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         """
@@ -354,3 +356,31 @@ class WishlistViewSet(viewsets.ViewSet):
 
         except Exception as ex:
             return Response({"reason": ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk=None):
+        """
+        @api {DELETE} /wishlists/:id DELETE wishlist instance
+        @apiName DeleteWishlist
+        @apiGroup Wishlists
+
+        @apiParam {Number} id Wishlist ID (route parameter) to delete
+        @apiSuccessExample {json} Success
+            HTTP/1.1 204 No Content
+        """
+        try:
+            wishlist = Wishlist.objects.get(pk=pk)
+        except Wishlist.DoesNotExist:
+            return Response(
+                "Wishlist instance not found", status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Check if the authenticated user is the owner of the wishlist
+        if wishlist.user != request.user:
+            return Response(
+                "You are not authorized to delete this wishlist",
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        wishlist.delete()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
