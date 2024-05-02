@@ -142,18 +142,21 @@ class FriendViewSet(viewsets.ViewSet):
             friend_id for friend_pair in friend_ids for friend_id in friend_pair
         ]
 
+        # Get IDs of users to whom the current user has sent friend requests
+        friend_requests_sent = Friend.objects.filter(
+            user1=current_user, accepted=False
+        ).values_list("user2_id", flat=True)
+
         # Exclude the current user and the user's friends from the query
         users = User.objects.exclude(Q(id=current_user.id) | Q(id__in=all_friend_ids))
 
-        # Filter friends by name if search query is provided
-        search_query = request.query_params.get("q", None)
-        if search_query:
-            users = users.filter(
-                Q(first_name__icontains=search_query)
-                | Q(last_name__icontains=search_query)
-                | Q(username__icontains=search_query)
-            )
+        # Serialize the users along with information about friend requests
+        serialized_users = []
+        for user in users:
+            serialized_user = UserSerializer(user).data
+            # Check if the user has already received a friend request from the current user
+            friend_request_sent = user.id in friend_requests_sent
+            serialized_user["friend_request_sent"] = friend_request_sent
+            serialized_users.append(serialized_user)
 
-        # Serialize the users and return the response
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+        return Response(serialized_users)
