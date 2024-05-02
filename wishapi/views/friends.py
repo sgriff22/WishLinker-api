@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework import status
 from wishapi.models import Friend
@@ -6,6 +6,12 @@ from django.contrib.auth.models import User
 from wishapi.views import UserSerializer
 from django.db.models import Q
 from rest_framework.decorators import action
+
+
+class FriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields = ["id", "user1", "user2", "accepted"]
 
 
 class FriendViewSet(viewsets.ViewSet):
@@ -67,6 +73,57 @@ class FriendViewSet(viewsets.ViewSet):
         friend.delete()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    def create(self, request):
+        """
+        @api {POST} /friends Create a new friend instance
+        @apiName CreateFriend
+        @apiGroup Friends
+
+        @apiHeader {String} Authorization Auth token
+        @apiHeaderExample {String} Authorization
+            Token 9ba45f09651c5b0c404f37a2d2572c026c146611
+
+        @apiParam {Number} user_id ID of the user to send friend request
+        @apiParamExample {json} Input
+            {
+                "user_id": 123
+            }
+
+        @apiSuccessExample {json} Success
+            HTTP/1.1 201 Created
+            {
+                "id": 8,
+                "user1_id": 1,
+                "user2_id": 2,
+                "accepted": false
+            }
+        """
+
+        try:
+            # Get the current user
+            user = request.user
+
+            # Get the user_id from the request data
+            user_id = request.data.get("user_id")
+
+            # Retrieve the User instance corresponding to user_id
+            friend_user = User.objects.get(pk=user_id)
+
+            # Create a new Friend instance
+            new_friend = Friend.objects.create(
+                user1=user, user2=friend_user, accepted=False
+            )
+
+            serializer = FriendSerializer(new_friend, context={"request": request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User instance not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as ex:
+            return Response({"reason": ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=["get"])
     def get_all_users(self, request):
