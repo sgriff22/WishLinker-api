@@ -1,9 +1,23 @@
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
-from wishapi.views import UserViewSet
+from rest_framework.authtoken.views import obtain_auth_token
+from wishapi.views import (
+    UserViewSet,
+    WishlistViewSet,
+    PriorityViewSet,
+    ProfileViewSet,
+    FriendViewSet,
+    WishlistItemViewSet,
+)
+
 
 router = routers.DefaultRouter(trailing_slash=False)
+router.register(r"wishlists", WishlistViewSet, "wishlist")
+router.register(r"priorities", PriorityViewSet, "priority")
+router.register(r"profile", ProfileViewSet, "profile")
+router.register(r"friends", FriendViewSet, "friend")
+router.register(r"wishlist_items", WishlistItemViewSet, "wishlist_item")
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -11,4 +25,6 @@ urlpatterns = [
     path(
         "register", UserViewSet.as_view({"post": "register_account"}), name="register"
     ),
+    path("api-token-auth", obtain_auth_token),
+    path("api-auth", include("rest_framework.urls", namespace="rest_framework")),
 ]
