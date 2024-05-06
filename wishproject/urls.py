@@ -9,6 +9,7 @@ from wishapi.views import (
     ProfileViewSet,
     FriendViewSet,
     WishlistItemViewSet,
+    PurchaseViewSet,
 )
 
 
@@ -18,6 +19,7 @@ router.register(r"priorities", PriorityViewSet, "priority")
 router.register(r"profile", ProfileViewSet, "profile")
 router.register(r"friends", FriendViewSet, "friend")
 router.register(r"wishlist_items", WishlistItemViewSet, "wishlist_item")
+router.register(r"purchases", PurchaseViewSet, "purchase")
 
 urlpatterns = [
     path("", include(router.urls)),

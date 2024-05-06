@@ -24,6 +24,8 @@ class WishlistItemSerializer(serializers.ModelSerializer):
             "priority",
             "priority_name",
             "creation_date",
+            "leftover_quantity",
+            "purchase_quantity",
         )
 
     def get_priority_name(self, obj):
