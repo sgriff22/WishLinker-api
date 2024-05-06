@@ -4,3 +4,4 @@ from .priorities import PriorityViewSet
 from .profile import ProfileViewSet
 from .friends import FriendViewSet
 from .wishlist_items import WishlistItemViewSet
+from .purchases import PurchaseViewSet
