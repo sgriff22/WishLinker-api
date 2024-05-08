@@ -1,11 +1,18 @@
 from rest_framework import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework import status
-from wishapi.models import Friend
+from wishapi.models import Friend, Profile
 from django.contrib.auth.models import User
 from wishapi.views import UserSerializer
 from django.db.models import Q
 from rest_framework.decorators import action
+
+
+class ProfileImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ("image",)
 
 
 class FriendSerializer(serializers.ModelSerializer):
@@ -150,13 +157,20 @@ class FriendViewSet(viewsets.ViewSet):
         # Exclude the current user and the user's friends from the query
         users = User.objects.exclude(Q(id=current_user.id) | Q(id__in=all_friend_ids))
 
-        # Serialize the users along with information about friend requests
         serialized_users = []
         for user in users:
             serialized_user = UserSerializer(user).data
             # Check if the user has already received a friend request from the current user
             friend_request_sent = user.id in friend_requests_sent
             serialized_user["friend_request_sent"] = friend_request_sent
+            # Append the profile image to the serialized user
+            try:
+                profile = Profile.objects.get(user=user)
+
+            except Profile.DoesNotExist:
+                profile = None
+
+            serialized_user["profile"] = ProfileImageSerializer(profile).data
             serialized_users.append(serialized_user)
 
         return Response(serialized_users)
