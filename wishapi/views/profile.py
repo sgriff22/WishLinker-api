@@ -4,9 +4,18 @@ from rest_framework import serializers, status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import viewsets
-from wishapi.models import Wishlist, Friend
+from wishapi.models import Wishlist, Friend, Profile
 from wishapi.views import UserSerializer
 from django.db.models import Q
+from django.core.files.base import ContentFile
+import base64
+import uuid
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ("id", "user", "bio", "birthday", "address", "image")
 
 
 class WishlistSerializer(serializers.ModelSerializer):
@@ -297,3 +306,66 @@ class ProfileViewSet(viewsets.ViewSet):
 
         except Exception as ex:
             return HttpResponseServerError(str(ex))
+
+    def create(self, request):
+        """
+        @api {POST} /profile POST new profile
+        @apiName CreateProfile
+        @apiGroup Profile
+
+        @apiHeader {String} Authorization Auth token
+        @apiHeaderExample {String} Authorization
+            Token 9ba45f09651c5b0c404f37a2d2572c026c146611
+
+        @apiParam {String} bio Short biography of the user
+        @apiParam {String} [birthday] Birthday of the user (optional)
+        @apiParam {String} [address] Address of the user (optional)
+        @apiParam {String} [image] Base64-encoded image data of the user (optional)
+        @apiParamExample {json} Input
+            {
+                "bio": "A short biography of the user",
+                "birthday": "YYYY-MM-DD",
+                "address": "User address",
+                "image": "base64_encoded_image_data"
+            }
+
+        @apiSuccess (201) {Object} profile Created profile
+        @apiSuccess (201) {id} profile.id Profile Id
+        @apiSuccess (201) {String} profile.bio Short biography of the user
+        @apiSuccess (201) {String} [profile.birthday] Birthday of the user
+        @apiSuccess (201) {String} [profile.address] Address of the user
+        @apiSuccess (201) {String} [profile.image] URL to the profile image (if uploaded)
+            {
+                "id": 11,
+                "user": 1,
+                "bio": "A short biography of the user",
+                "birthday": "2024-05-10",
+                "address": "123 Main Street, Aurora Springs, CA 90210",
+                "image": "/media/profile/user_image-36d6c934-7619-4048-afb1-c43c970fe95c.png"
+            }
+        """
+        user = request.auth.user
+        new_profile = Profile()
+        new_profile.bio = request.data.get("bio")
+        new_profile.birthday = request.data.get("birthday")
+        new_profile.address = request.data.get("address")
+        new_profile.user = user
+
+        if "image" in request.data:
+            image_data = request.data["image"]
+            format, imgstr = image_data.split(";base64,")
+            print("Format:", format)  # Print format for debugging
+            ext = format.split("/")[-1]
+            print("Extension:", ext)  # Print extension for debugging
+            image_data = ContentFile(
+                base64.b64decode(imgstr), name=f"user_image-{uuid.uuid4()}.{ext}"
+            )
+            new_profile.image = image_data
+        try:
+            new_profile.save()
+
+            serializer = ProfileSerializer(new_profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
