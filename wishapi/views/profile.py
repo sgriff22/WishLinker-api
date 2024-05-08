@@ -12,7 +12,15 @@ import base64
 import uuid
 
 
+class ProfileImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ("image",)
+
+
 class ProfileSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Profile
         fields = ("id", "user", "bio", "birthday", "address", "image")
@@ -56,8 +64,19 @@ class FriendSerializer(serializers.ModelSerializer):
             # If viewed_user is not available (when retrieving the authenticated user's profile)
             friend_user = obj.user1 if request_user != obj.user1 else obj.user2
 
+        # Get the profile of the friend user
+        friend_profile = Profile.objects.filter(user=friend_user).first()
+
+        # Serialize the friend user along with profile image
         friend_user_serializer = UserSerializer(friend_user)
-        return friend_user_serializer.data
+        friend_profile_serializer = ProfileImageSerializer(
+            friend_profile, context=self.context
+        )
+
+        friend_info_data = friend_user_serializer.data
+        friend_info_data["profile"] = friend_profile_serializer.data
+
+        return friend_info_data
 
 
 class ProfileViewSet(viewsets.ViewSet):
@@ -140,6 +159,17 @@ class ProfileViewSet(viewsets.ViewSet):
         try:
             user = request.auth.user
 
+            # Try to retrieve the user's profile instance
+            try:
+                profile = Profile.objects.get(user=user)
+                profile_serializer = ProfileSerializer(
+                    profile, context={"request": request}
+                )
+                profile_data = profile_serializer.data
+            except Profile.DoesNotExist:
+                profile = None
+                profile_data = {}
+
             # Retrieve wishlists associated with the user
             wishlists = Wishlist.objects.filter(user=user, private=False)
             wishlist_serializer = WishlistSerializer(wishlists, many=True)
@@ -180,6 +210,7 @@ class ProfileViewSet(viewsets.ViewSet):
             # Combine all serialized data into a single response
             response_data = {
                 "user": user_serializer.data,
+                "profile": profile_data,
                 "wishlists": wishlist_serializer.data,
                 "friends": friend_serializer.data,
                 "friend_requests": friend_request_serializer.data,
@@ -270,6 +301,17 @@ class ProfileViewSet(viewsets.ViewSet):
             # Retrieve the user based on the primary key (pk)
             user = User.objects.get(pk=pk)
 
+            # Try to retrieve the user's profile instance
+            try:
+                profile = Profile.objects.get(user=user)
+                profile_serializer = ProfileSerializer(
+                    profile, context={"request": request}
+                )
+                profile_data = profile_serializer.data
+            except Profile.DoesNotExist:
+                profile = None
+                profile_data = {}
+
             # Retrieve wishlists associated with the user
             wishlists = Wishlist.objects.filter(user=user, private=False)
             wishlist_serializer = WishlistSerializer(wishlists, many=True)
@@ -295,6 +337,7 @@ class ProfileViewSet(viewsets.ViewSet):
             # Combine all serialized data into a single response
             response_data = {
                 "user": user_serializer.data,
+                "profile": profile_data,
                 "wishlists": wishlist_serializer.data,
                 "friends": friend_serializer.data,
             }
@@ -354,9 +397,7 @@ class ProfileViewSet(viewsets.ViewSet):
         if "image" in request.data:
             image_data = request.data["image"]
             format, imgstr = image_data.split(";base64,")
-            print("Format:", format)  # Print format for debugging
             ext = format.split("/")[-1]
-            print("Extension:", ext)  # Print extension for debugging
             image_data = ContentFile(
                 base64.b64decode(imgstr), name=f"user_image-{uuid.uuid4()}.{ext}"
             )
