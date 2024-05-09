@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.core.files.base import ContentFile
 import base64
 import uuid
+from django.core.files.storage import default_storage
 
 
 class ProfileImageSerializer(serializers.ModelSerializer):
@@ -410,3 +411,77 @@ class ProfileViewSet(viewsets.ViewSet):
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None):
+        """
+        Update the user's profile.
+
+        @api {PUT} /profile/:id Update User Profile
+        @apiName UpdateUserProfile
+        @apiGroup Profiles
+        @apiHeader {String} Authorization Auth token
+        @apiHeaderExample {String} Authorization: Token d74b97fbe905134520bb236b0016703f50380dcf
+        @apiParam {Number} pk User's unique ID.
+
+        @apiParam {String} [bio] Short biography of the user (optional)
+        @apiParam {String} [birthday] Birthday of the user (optional)
+        @apiParam {String} [address] Address of the user (optional)
+        @apiParam {String} [image] Base64-encoded image data of the user (optional)
+        @apiParamExample {json} Input
+            {
+                "bio": "Updated biography",
+                "birthday": "YYYY-MM-DD",
+                "address": "Updated address",
+                "image": "base64_encoded_image_data"
+            }
+
+        @apiSuccess {Object} profile Updated profile
+        @apiSuccess {id} profile.id Profile Id
+        @apiSuccess {String} profile.bio Short biography of the user
+        @apiSuccess {String} [profile.birthday] Birthday of the user
+        @apiSuccess {String} [profile.address] Address of the user
+        @apiSuccess {String} [profile.image] URL to the profile image (if uploaded)
+            {
+                "id": 11,
+                "user": 1,
+                "bio": "Updated biography",
+                "birthday": "YYYY-MM-DD",
+                "address": "Updated address",
+                "image": "/media/profile/user_image-36d6c934-7619-4048-afb1-c43c970fe95c.png"
+            }
+        """
+
+        try:
+            profile = Profile.objects.get(pk=pk)
+
+            # Update profile fields if provided in request data
+            profile.bio = request.data.get("bio")
+            profile.birthday = request.data.get("birthday")
+            profile.address = request.data.get("address")
+
+            if "image" in request.data:
+                image_data = request.data["image"]
+                format, imgstr = image_data.split(";base64,")
+                ext = format.split("/")[-1]
+                new_image_data = ContentFile(
+                    base64.b64decode(imgstr), name=f"user_image-{uuid.uuid4()}.{ext}"
+                )
+
+                # Delete old profile image from storage if exists
+                if profile.image:
+                    default_storage.delete(profile.image.name)
+
+                profile.image = new_image_data
+
+            profile.save()
+
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        except Exception as e:
+            return HttpResponseServerError(str(e))
