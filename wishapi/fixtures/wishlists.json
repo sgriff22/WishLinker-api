@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "user": 1,
-      "title": "My Birthday 40th birthday",
+      "title": "My 40th Birthday",
       "description": "I am turning 40! Here are a few things I like",
       "spoil_surprises": true,
       "private": false,

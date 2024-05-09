@@ -36,8 +36,12 @@ class WishlistSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "description",
+            "spoil_surprises",
             "creation_date",
             "date_of_event",
+            "pinned",
+            "private",
+            "address",
         )
 
 
@@ -218,6 +222,10 @@ class ProfileViewSet(viewsets.ViewSet):
 
             user_serializer = UserSerializer(user)
 
+            # Get users pinned personal wishlists
+            my_pinned = Wishlist.objects.filter(user=user, pinned=True)
+            my_pinned_serializer = WishlistSerializer(my_pinned, many=True)
+
             # Combine all serialized data into a single response
             response_data = {
                 "user": user_serializer.data,
@@ -226,6 +234,7 @@ class ProfileViewSet(viewsets.ViewSet):
                 "friends": friend_serializer.data,
                 "received_requests": received_friend_request_serializer.data,
                 "sent_requests": sent_friend_request_serializer.data,
+                "my_pinned_lists": my_pinned_serializer.data,
             }
 
             return Response(response_data)
