@@ -4,7 +4,7 @@ from rest_framework import status
 from wishapi.models import Friend, Profile
 from django.contrib.auth.models import User
 from wishapi.views import UserSerializer
-from django.db.models import Q
+from django.db.models import Q, Value, Case, When, IntegerField
 from rest_framework.decorators import action
 
 
@@ -154,8 +154,22 @@ class FriendViewSet(viewsets.ViewSet):
             user1=current_user, accepted=False
         ).values_list("user2_id", flat=True)
 
+        # Get IDs of users to whom the current user has sent friend requests
+        friend_requests_received = Friend.objects.filter(
+            user2=current_user, accepted=False
+        ).values_list("user1_id", flat=True)
+
         # Exclude the current user and the user's friends from the query
         users = User.objects.exclude(Q(id=current_user.id) | Q(id__in=all_friend_ids))
+
+        # Filter friends by name if search query is provided
+        search_query = request.query_params.get("q", None)
+        if search_query:
+            users = users.filter(
+                Q(first_name__icontains=search_query)
+                | Q(last_name__icontains=search_query)
+                | Q(username__icontains=search_query)
+            )
 
         serialized_users = []
         for user in users:
@@ -163,6 +177,8 @@ class FriendViewSet(viewsets.ViewSet):
             # Check if the user has already received a friend request from the current user
             friend_request_sent = user.id in friend_requests_sent
             serialized_user["friend_request_sent"] = friend_request_sent
+            friend_request_received = user.id in friend_requests_received
+            serialized_user["friend_request_received"] = friend_request_received
             # Append the profile image to the serialized user
             try:
                 profile = Profile.objects.get(user=user)

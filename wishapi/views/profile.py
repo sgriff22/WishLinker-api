@@ -194,12 +194,22 @@ class ProfileViewSet(viewsets.ViewSet):
                 friends, many=True, context={"request": request}
             )
 
-            # Retrieve friend requests associated with the user
-            friend_requests = Friend.objects.filter(
-                Q(user1_id=user.id) | Q(user2_id=user.id), accepted=False
+            # Retrieve received friend requests associated with the user
+            received_requests = Friend.objects.filter(
+                Q(user2_id=user.id), accepted=False
             )
-            friend_request_serializer = FriendSerializer(
-                friend_requests,
+            received_friend_request_serializer = FriendSerializer(
+                received_requests,
+                many=True,
+                context={
+                    "request": request,
+                },
+            )
+
+            # Retrieve friend requests sent by the user
+            sent_requests = Friend.objects.filter(Q(user1_id=user.id), accepted=False)
+            sent_friend_request_serializer = FriendSerializer(
+                sent_requests,
                 many=True,
                 context={
                     "request": request,
@@ -214,7 +224,8 @@ class ProfileViewSet(viewsets.ViewSet):
                 "profile": profile_data,
                 "wishlists": wishlist_serializer.data,
                 "friends": friend_serializer.data,
-                "friend_requests": friend_request_serializer.data,
+                "received_requests": received_friend_request_serializer.data,
+                "sent_requests": sent_friend_request_serializer.data,
             }
 
             return Response(response_data)
