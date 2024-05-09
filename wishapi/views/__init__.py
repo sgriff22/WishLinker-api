@@ -5,3 +5,4 @@ from .profile import ProfileViewSet
 from .friends import FriendViewSet
 from .wishlist_items import WishlistItemViewSet, WishlistItemSerializer
 from .purchases import PurchaseViewSet
+from .pins import PinViewSet
