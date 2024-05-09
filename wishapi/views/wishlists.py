@@ -454,6 +454,9 @@ class WishlistViewSet(viewsets.ViewSet):
             wishlist.date_of_event = request.data.get("date_of_event")
             wishlist.address = request.data.get("address")
 
+            if "pinned" in request.data:
+                wishlist.pinned = request.data.get("pinned")
+
             # Save the updated wishlist
             wishlist.save()
 
