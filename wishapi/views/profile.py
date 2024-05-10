@@ -4,7 +4,7 @@ from rest_framework import serializers, status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import viewsets
-from wishapi.models import Wishlist, Friend, Profile
+from wishapi.models import Wishlist, Friend, Profile, Pin
 from wishapi.views import UserSerializer
 from django.db.models import Q
 from django.core.files.base import ContentFile
@@ -12,6 +12,11 @@ import base64
 import uuid
 from django.core.files.storage import default_storage
 
+class PinSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Pin
+        fields = ["id", "wishlist"]
 
 class ProfileImageSerializer(serializers.ModelSerializer):
 
@@ -226,6 +231,10 @@ class ProfileViewSet(viewsets.ViewSet):
             my_pinned = Wishlist.objects.filter(user=user, pinned=True)
             my_pinned_serializer = WishlistSerializer(my_pinned, many=True)
 
+            # Get users pinned friend wishlists
+            pinned_friends = Pin.objects.filter(user=user)
+            pinned_friend_serializer = PinSerializer(pinned_friends, many=True)
+
             # Combine all serialized data into a single response
             response_data = {
                 "user": user_serializer.data,
@@ -235,6 +244,7 @@ class ProfileViewSet(viewsets.ViewSet):
                 "received_requests": received_friend_request_serializer.data,
                 "sent_requests": sent_friend_request_serializer.data,
                 "my_pinned_lists": my_pinned_serializer.data,
+                "friend_pins": pinned_friend_serializer.data,
             }
 
             return Response(response_data)
