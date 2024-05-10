@@ -1,0 +1,98 @@
+[
+  {
+    "model": "wishapi.profile",
+    "pk": 1,
+    "fields": {
+      "user": 3,
+      "bio": "Hi, I'm Jenna! A passionate traveler and food enthusiast. When I'm not exploring new places, you can find me experimenting with recipes in my kitchen. I believe in the power of kindness and always strive to spread positivity wherever I go.",
+      "image": "profile/user_image-1b832443-3662-45dd-9fba-f3c4b127a1e9.jpeg",
+      "icon": null,
+      "birthday": "1990-05-09",
+      "address": "123 Main St, City, TN 35465"
+    }
+  },
+  {
+    "model": "wishapi.profile",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "bio": "Hey there, I'm Ryan! An avid sports fan and tech enthusiast. Whether it's on the basketball court or coding a new project, I'm always up for a challenge. I believe in the importance of continuous learning and strive to improve myself every day.",
+      "image": "profile/user_image-e54d016b-4485-4589-9036-90bc4263b87a.jpeg",
+      "icon": null,
+      "birthday": "1989-03-15",
+      "address": "789 Maple Avenue, Cityville, TN 56324"
+    }
+  },
+  {
+    "model": "wishapi.profile",
+    "pk": 3,
+    "fields": {
+      "user": 8,
+      "bio": "Hello, I'm Jane! A nature lover and bookworm. You can often find me hiking in the mountains or curled up with a good book in my favorite coffee shop. I believe in the beauty of simplicity and strive to find joy in the little things in life.",
+      "image": "profile/user_image-d6ae8782-1526-43bd-a96d-191f3539f974.jpeg",
+      "icon": null,
+      "birthday": "1993-05-23",
+      "address": "321 Elm Street, Townsville, NY 75123"
+    }
+  },
+  {
+    "model": "wishapi.profile",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "bio": "Hi, I'm Bryan Nilson! A nature lover and outdoor enthusiast. Whether it's hiking in the mountains or camping under the stars, I'm always seeking new adventures in the great outdoors.",
+      "image": "profile/user_image-3924ed36-25d7-42de-8b59-f6ddd7ec53cb.jpeg",
+      "icon": null,
+      "birthday": "1988-06-10",
+      "address": "890 Oak Street, Springfield, KY 45632"
+    }
+  },
+  {
+    "model": "wishapi.profile",
+    "pk": 5,
+    "fields": {
+      "user": 6,
+      "bio": "Hi, I'm Tyler Hilliard! A technology enthusiast and gamer. Whether it's building computers or playing the latest video games, I'm always immersed in the world of technology.",
+      "image": "profile/user_image-696ee511-21f9-4fbb-a513-cb0fae43c2ec.jpeg",
+      "icon": null,
+      "birthday": "1993-11-30",
+      "address": "789 Maple Avenue, Townsville, GA 15643"
+    }
+  },
+  {
+    "model": "wishapi.profile",
+    "pk": 6,
+    "fields": {
+      "user": 5,
+      "bio": "Hi, I'm Emily Lemmon! A music lover and aspiring musician. Whether it's playing the guitar or attending live concerts, I'm always surrounded by the magic of music.",
+      "image": "profile/user_image-e6036f8e-3bd9-4a06-9706-ed9ef10cdedc.jpeg",
+      "icon": null,
+      "birthday": "1995-02-18",
+      "address": "456 Elm Street, Cityville, WI 52345"
+    }
+  },
+  {
+    "model": "wishapi.profile",
+    "pk": 7,
+    "fields": {
+      "user": 9,
+      "bio": "Hi, I'm Alice! A nature lover and bookworm. You can often find me hiking in the mountains or curled up with a good book in my favorite coffee shop. I believe in the beauty of simplicity and strive to find joy in the little things in life.",
+      "image": "profile/user_image-8ff8d613-2001-4233-a1e3-2aa627c4f297.jpeg",
+      "icon": null,
+      "birthday": "1996-11-03",
+      "address": "321 Elm Street, Townsville, NJ 54632"
+    }
+  },
+  {
+    "model": "wishapi.profile",
+    "pk": 8,
+    "fields": {
+      "user": 7,
+      "bio": "Hi, I'm Olivia White! A fitness enthusiast and health advocate. Whether it's hitting the gym or cooking nutritious meals, I'm always striving to live a healthy and active lifestyle.",
+      "image": "profile/user_image-4d02f48e-4359-426e-b05d-959158ab028d.jpeg",
+      "icon": null,
+      "birthday": "1991-05-05",
+      "address": "123 Pine Street, Springfield, TN 36542"
+    }
+  }
+]

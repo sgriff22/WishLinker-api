@@ -1,0 +1,34 @@
+[
+  {
+    "model": "wishapi.pin",
+    "pk": 1,
+    "fields": {
+      "user_id": 2,
+      "wishlist_id": 13
+    }
+  },
+  {
+    "model": "wishapi.pin",
+    "pk": 2,
+    "fields": {
+      "user_id": 2,
+      "wishlist_id": 5
+    }
+  },
+  {
+    "model": "wishapi.pin",
+    "pk": 3,
+    "fields": {
+      "user_id": 1,
+      "wishlist_id": 5
+    }
+  },
+  {
+    "model": "wishapi.pin",
+    "pk": 4,
+    "fields": {
+      "user_id": 3,
+      "wishlist_id": 1
+    }
+  }
+]
