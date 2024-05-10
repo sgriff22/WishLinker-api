@@ -17,7 +17,7 @@
     "fields": {
       "user": 1,
       "bio": "Hey there, I'm Ryan! An avid sports fan and tech enthusiast. Whether it's on the basketball court or coding a new project, I'm always up for a challenge. I believe in the importance of continuous learning and strive to improve myself every day.",
-      "image": "profile/user_image-e54d016b-4485-4589-9036-90bc4263b87a.jpeg",
+      "image": "profile/user_image-9cddd62c-9d9f-4fb2-a0bb-518817803c58.jpeg",
       "icon": null,
       "birthday": "1989-03-15",
       "address": "789 Maple Avenue, Cityville, TN 56324"
@@ -93,6 +93,18 @@
       "icon": null,
       "birthday": "1991-05-05",
       "address": "123 Pine Street, Springfield, TN 36542"
+    }
+  },
+  {
+    "model": "wishapi.profile",
+    "pk": 9,
+    "fields": {
+      "user": 10,
+      "bio": "Hi, I'm Eva! a tech enthusiast and aspiring entrepreneur. I'm passionate about exploring new technologies and building innovative solutions to real-world problems. When I'm not coding, you can find me hiking in the great outdoors or enjoying a good cup of coffee at my favorite café. Let's connect and create something amazing together!",
+      "image": "profile/user_image-ff55d534-2a91-458f-b6ad-2acdb076485c.jpeg",
+      "icon": null,
+      "birthday": "1988-02-05",
+      "address": "123 Nowhere Street, Springfield, KY 56235"
     }
   }
 ]

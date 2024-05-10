@@ -12,11 +12,13 @@ import base64
 import uuid
 from django.core.files.storage import default_storage
 
+
 class PinSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pin
         fields = ["id", "wishlist"]
+
 
 class ProfileImageSerializer(serializers.ModelSerializer):
 
@@ -491,17 +493,22 @@ class ProfileViewSet(viewsets.ViewSet):
 
             if "image" in request.data:
                 image_data = request.data["image"]
-                format, imgstr = image_data.split(";base64,")
-                ext = format.split("/")[-1]
-                new_image_data = ContentFile(
-                    base64.b64decode(imgstr), name=f"user_image-{uuid.uuid4()}.{ext}"
-                )
+                if image_data.startswith("data:image"):  # Base64 encoded image
+                    format, imgstr = image_data.split(";base64,")
+                    ext = format.split("/")[-1]
+                    new_image_data = ContentFile(
+                        base64.b64decode(imgstr),
+                        name=f"user_image-{uuid.uuid4()}.{ext}",
+                    )
 
-                # Delete old profile image from storage if exists
-                if profile.image:
-                    default_storage.delete(profile.image.name)
+                    # Delete old profile image from storage if exists
+                    if profile.image:
+                        default_storage.delete(profile.image.name)
 
-                profile.image = new_image_data
+                    profile.image = new_image_data
+                else:
+                    # No need to update the image in this case
+                    pass
 
             profile.save()
 
