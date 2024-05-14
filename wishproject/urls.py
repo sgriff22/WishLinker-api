@@ -33,4 +33,9 @@ urlpatterns = [
     ),
     path("api-token-auth", obtain_auth_token),
     path("api-auth", include("rest_framework.urls", namespace="rest_framework")),
+    path(
+        "friends_recent_wishlists",
+        WishlistViewSet.as_view({"get": "friends_recent_wishlists"}),
+        name="friends_recent_wishlist",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

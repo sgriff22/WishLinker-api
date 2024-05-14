@@ -2,11 +2,13 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from django.contrib.auth.models import User
-from wishapi.models import Wishlist, WishlistItem, Priority
+from wishapi.models import Wishlist, WishlistItem, Friend
 from django.http import HttpResponseServerError
 from django.db.models import Q
 from wishapi.views import UserSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from datetime import datetime, timedelta
 
 
 class WishlistItemSerializer(serializers.ModelSerializer):
@@ -471,3 +473,46 @@ class WishlistViewSet(viewsets.ViewSet):
 
         except Exception as ex:
             return HttpResponseServerError(ex)
+
+    @action(detail=False, methods=["get"])
+    def friends_recent_wishlists(self, request):
+        """
+        Retrieve recent wishlists created by friends within the last two weeks.
+
+        This method retrieves wishlists created by friends of the authenticated user
+        that were created within the last two weeks. It calculates the date two weeks
+        ago from the current date and filters wishlists based on this timeframe.
+
+        Returns:
+            Response: A JSON response containing recent wishlists created by friends.
+
+        Raises:
+            ValueError: If the query for retrieving friends' wishlists encounters an error.
+
+        """
+
+        try:
+            user = request.user
+
+            # Calculate the date two weeks ago
+            two_weeks_ago = datetime.now() - timedelta(weeks=2)
+
+            # Retrieve friends associated with the user
+            friends = Friend.objects.filter(
+                Q(user1_id=user.id) | Q(user2_id=user.id), accepted=True
+            )
+
+            # Get the users who are friends with the current user
+            friends_users = [friend.user1 if friend.user2 == user else friend.user2 for friend in friends]
+
+            # Retrieve public wishlists of friends created within the last two weeks
+            friend_recent_wishlists = Wishlist.objects.filter(
+                user__in=friends_users, creation_date__gte=two_weeks_ago, private=False
+            )
+
+            # Serialize friend wishlists
+            serializer = WishlistSerializer(friend_recent_wishlists, many=True)
+            return Response(serializer.data)
+    
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
