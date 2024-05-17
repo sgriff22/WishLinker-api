@@ -11,6 +11,16 @@ from rest_framework.decorators import action
 from datetime import datetime, timedelta
 
 
+class WishlistEventSerializer(serializers.ModelSerializer):
+    """JSON serializer for public wishlists"""
+
+    user = UserSerializer()
+
+    class Meta:
+        model = Wishlist
+        fields = ("id", "user", "title", "date_of_event")
+
+
 class WishlistItemSerializer(serializers.ModelSerializer):
     priority_name = serializers.SerializerMethodField()
 
@@ -503,7 +513,10 @@ class WishlistViewSet(viewsets.ViewSet):
             )
 
             # Get the users who are friends with the current user
-            friends_users = [friend.user1 if friend.user2 == user else friend.user2 for friend in friends]
+            friends_users = [
+                friend.user1 if friend.user2 == user else friend.user2
+                for friend in friends
+            ]
 
             # Retrieve public wishlists of friends created within the last two weeks
             friend_recent_wishlists = Wishlist.objects.filter(
@@ -513,6 +526,58 @@ class WishlistViewSet(viewsets.ViewSet):
             # Serialize friend wishlists
             serializer = WishlistSerializer(friend_recent_wishlists, many=True)
             return Response(serializer.data)
-    
+
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @action(detail=False, methods=["get"])
+    def upcoming_events(self, request):
+        """
+        Retrieve events with a non-empty date_of_event field from user's own wishlists
+        and public wishlists of friends.
+
+        This method retrieves events with a non-empty date_of_event field from both
+        the personal wishlists of the authenticated user and the public wishlists of their friends.
+
+        Returns:
+            Response: A JSON response containing events with a non-empty date_of_event field
+            from personal wishlists and public wishlists of friends.
+        """
+
+        try:
+            user = request.user
+
+            # Retrieve personal wishlists of the user
+            personal_wishlists = Wishlist.objects.filter(
+                user=user, date_of_event__isnull=False
+            )
+
+            # Retrieve friends associated with the user
+            friends = Friend.objects.filter(
+                Q(user1=user) | Q(user2=user), accepted=True
+            )
+
+            # Get the users who are friends with the current user
+            friends_users = [
+                friend.user1 if friend.user2 == user else friend.user2
+                for friend in friends
+            ]
+
+            # Retrieve public wishlists of friends with non-empty date_of_event
+            friends_wishlists = Wishlist.objects.filter(
+                user__in=friends_users, private=False, date_of_event__isnull=False
+            )
+
+            # Combine personal and friends' wishlists
+            all_wishlists = personal_wishlists | friends_wishlists
+
+            # Serialize events
+            serializer = WishlistEventSerializer(all_wishlists, many=True)
+            return Response(serializer.data)
+
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
