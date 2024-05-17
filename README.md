@@ -2,7 +2,7 @@
 
 ## Notes
 
-The client side repository for this API is the following link. https://github.com/sgriff22/WishLinker-client
+The client-side repository for this API can be found [here](https://github.com/sgriff22/WishLinker-client).
 
 ## Technologies Used
 
@@ -16,9 +16,9 @@ The client side repository for this API is the following link. https://github.co
 4. Run `./seed_database` to create all the tables and load fixtures to database
 5. Open the project directory in VS Code
 6. Press <kbd>⌘</kbd><kbd>SHIFT</kbd><kbd>P</kbd> (Mac), or <kbd>Ctrl</kbd><kbd>SHIFT</kbd><kbd>P</kbd> (Windows) to open the Command Palette, and select "Python: Select Interpreter".
-4. Search for "wish" and select the interpreter that starts with those characters. There should only be one to choose from.
-7. Start the debugger
+7. Search for "wish" and select the interpreter that starts with those characters. There should only be one to choose from.
+8. Start the debugger
    1. Mac: **Shift+Option+D**
    2. Windows: **Shift+Alt+D**
-8. Verify that the process starts with no exceptions
-9. Go to client side repository and follow steps to open site.
+9. Verify that the process starts with no exceptions
+10. If you haven't already, go to the client-side repository and follow the steps to open the site.
