@@ -38,4 +38,9 @@ urlpatterns = [
         WishlistViewSet.as_view({"get": "friends_recent_wishlists"}),
         name="friends_recent_wishlist",
     ),
+    path(
+        "upcoming_events",
+        WishlistViewSet.as_view({"get": "upcoming_events"}),
+        name="upcoming_event",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
