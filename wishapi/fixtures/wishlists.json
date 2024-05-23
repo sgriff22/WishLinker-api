@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "user": 1,
-      "title": "My Birthday 40th birthday",
+      "title": "My 40th Birthday",
       "description": "I am turning 40! Here are a few things I like",
       "spoil_surprises": true,
       "private": false,
@@ -86,6 +86,216 @@
       "address": "303 Cherry Street, Chicago, IL 60001",
       "creation_date": "2024-04-27T08:00:00Z",
       "date_of_event": null,
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 7,
+    "fields": {
+      "user": 4,
+      "title": "Summer Picnic Essentials",
+      "description": "Everything needed for a perfect picnic in the park!",
+      "spoil_surprises": false,
+      "private": false,
+      "address": "",
+      "creation_date": "2024-04-30T12:00:00Z",
+      "date_of_event": null,
+      "pinned": true
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 8,
+    "fields": {
+      "user": 5,
+      "title": "Emily's Housewarming",
+      "description": "Gift ideas to warm up Emily's new home!",
+      "spoil_surprises": false,
+      "private": false,
+      "address": "789 Pine Street, Apartment 2B, Cityville, KY 45612",
+      "creation_date": "2024-05-12T10:00:00Z",
+      "date_of_event": "2024-06-01T16:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 9,
+    "fields": {
+      "user": 4,
+      "title": "Dream Vacation",
+      "description": "Items I need for my dream vacation to the Caribbean!",
+      "spoil_surprises": true,
+      "private": true,
+      "address": "",
+      "creation_date": "2024-05-02T16:00:00Z",
+      "date_of_event": null,
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 10,
+    "fields": {
+      "user": 7,
+      "title": "Olivia's Graduation Party",
+      "description": "Gift suggestions for Olivia's graduation celebration!",
+      "spoil_surprises": false,
+      "private": false,
+      "address": "456 Elm Street, Graduationville,TN 37152",
+      "creation_date": "2024-05-07T14:00:00Z",
+      "date_of_event": "2024-06-15T12:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 11,
+    "fields": {
+      "user": 9,
+      "title": "Sarah's Baby Shower",
+      "description": "Gift ideas to welcome the new addition to Sarah's family!",
+      "spoil_surprises": false,
+      "private": false,
+      "address": "123 Blossom Lane, Babyville,GA 56123",
+      "creation_date": "2024-05-20T10:00:00Z",
+      "date_of_event": "2024-06-15T14:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 12,
+    "fields": {
+      "user": 10,
+      "title": "David's Bar Mitzvah",
+      "description": "Suggestions for gifts to celebrate David's special day!",
+      "spoil_surprises": true,
+      "private": false,
+      "address": "789 Torah Way, Synagogueville, TN 31452",
+      "creation_date": "2024-05-25T09:00:00Z",
+      "date_of_event": "2024-07-07T10:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 13,
+    "fields": {
+      "user": 11,
+      "title": "Summer BBQ Extravaganza",
+      "description": "All the essentials for a sizzling summer BBQ party!",
+      "spoil_surprises": false,
+      "private": false,
+      "address": "789 Oak Avenue, BBQ City,CA 56324",
+      "creation_date": "2024-05-09T16:00:00Z",
+      "date_of_event": "2024-07-05T14:00:00Z",
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 14,
+    "fields": {
+      "user": 13,
+      "title": "Bob's Birthday Bash",
+      "description": "Gift ideas for Bob's birthday celebration!",
+      "spoil_surprises": true,
+      "private": false,
+      "address": "123 Main Street, Anytown, TN, 12345",
+      "creation_date": "2024-05-05T10:00:00Z",
+      "date_of_event": "2024-06-07T18:00:00Z",
+      "pinned": true
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 15,
+    "fields": {
+      "user": 6,
+      "title": "Personal Wellness Wishlist",
+      "description": "A private list of items to enhance personal well-being and self-care.",
+      "spoil_surprises": true,
+      "private": true,
+      "address": "",
+      "creation_date": "2024-06-01T12:00:00Z",
+      "date_of_event": null,
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 16,
+    "fields": {
+      "user": 5,
+      "title": "Secret Project Supplies",
+      "description": "A confidential list of materials needed for a top-secret project.",
+      "spoil_surprises": false,
+      "private": true,
+      "address": "",
+      "creation_date": "2024-06-05T09:00:00Z",
+      "date_of_event": null,
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 17,
+    "fields": {
+      "user": 2,
+      "title": "Hidden Hobby Essentials",
+      "description": "A private collection of tools and supplies for my secret hobby.",
+      "spoil_surprises": true,
+      "private": true,
+      "address": "",
+      "creation_date": "2024-06-10T15:00:00Z",
+      "date_of_event": null,
+      "pinned": false
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 18,
+    "fields": {
+      "user": 2,
+      "title": "Hidden Garden Sanctuary",
+      "description": "A private wishlist of plants, decorations, and accessories for creating a secluded garden retreat.",
+      "spoil_surprises": true,
+      "private": true,
+      "address": "",
+      "creation_date": "2024-06-20T14:00:00Z",
+      "date_of_event": null,
+      "pinned": true
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 19,
+    "fields": {
+      "user": 2,
+      "title": "Jolly Christmas Jubilee",
+      "description": "A magical wishlist overflowing with gifts to make this Christmas a jubilant celebration!",
+      "spoil_surprises": true,
+      "private": false,
+      "address": "",
+      "creation_date": "2024-07-10T13:00:00Z",
+      "date_of_event": "2024-12-25T13:00:00Z",
+      "pinned": true
+    }
+  },
+  {
+    "model": "wishapi.wishlist",
+    "pk": 20,
+    "fields": {
+      "user": 1,
+      "title": "Yuletide Cheer Bonanza",
+      "description": "An enchanting wishlist brimming with gifts to spread holiday joy and merriment!",
+      "spoil_surprises": true,
+      "private": false,
+      "address": "",
+      "creation_date": "2024-07-05T11:00:00Z",
+      "date_of_event": "2024-12-25T11:00:00Z",
       "pinned": false
     }
   }

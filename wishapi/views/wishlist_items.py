@@ -17,6 +17,8 @@ class WishlistItemSerializer(serializers.ModelSerializer):
             "quantity",
             "priority",
             "creation_date",
+            "leftover_quantity",
+            "purchase_quantity",
         ]
 
 

@@ -4,9 +4,34 @@ from rest_framework import serializers, status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import viewsets
-from wishapi.models import Wishlist, Friend
+from wishapi.models import Wishlist, Friend, Profile, Pin
 from wishapi.views import UserSerializer
 from django.db.models import Q
+from django.core.files.base import ContentFile
+import base64
+import uuid
+from django.core.files.storage import default_storage
+
+
+class PinSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Pin
+        fields = ["id", "wishlist"]
+
+
+class ProfileImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ("image",)
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ("id", "user", "bio", "birthday", "address", "image")
 
 
 class WishlistSerializer(serializers.ModelSerializer):
@@ -18,8 +43,12 @@ class WishlistSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "description",
+            "spoil_surprises",
             "creation_date",
             "date_of_event",
+            "pinned",
+            "private",
+            "address",
         )
 
 
@@ -47,8 +76,19 @@ class FriendSerializer(serializers.ModelSerializer):
             # If viewed_user is not available (when retrieving the authenticated user's profile)
             friend_user = obj.user1 if request_user != obj.user1 else obj.user2
 
+        # Get the profile of the friend user
+        friend_profile = Profile.objects.filter(user=friend_user).first()
+
+        # Serialize the friend user along with profile image
         friend_user_serializer = UserSerializer(friend_user)
-        return friend_user_serializer.data
+        friend_profile_serializer = ProfileImageSerializer(
+            friend_profile, context=self.context
+        )
+
+        friend_info_data = friend_user_serializer.data
+        friend_info_data["profile"] = friend_profile_serializer.data
+
+        return friend_info_data
 
 
 class ProfileViewSet(viewsets.ViewSet):
@@ -131,6 +171,17 @@ class ProfileViewSet(viewsets.ViewSet):
         try:
             user = request.auth.user
 
+            # Try to retrieve the user's profile instance
+            try:
+                profile = Profile.objects.get(user=user)
+                profile_serializer = ProfileSerializer(
+                    profile, context={"request": request}
+                )
+                profile_data = profile_serializer.data
+            except Profile.DoesNotExist:
+                profile = None
+                profile_data = {}
+
             # Retrieve wishlists associated with the user
             wishlists = Wishlist.objects.filter(user=user, private=False)
             wishlist_serializer = WishlistSerializer(wishlists, many=True)
@@ -154,12 +205,22 @@ class ProfileViewSet(viewsets.ViewSet):
                 friends, many=True, context={"request": request}
             )
 
-            # Retrieve friend requests associated with the user
-            friend_requests = Friend.objects.filter(
-                Q(user1_id=user.id) | Q(user2_id=user.id), accepted=False
+            # Retrieve received friend requests associated with the user
+            received_requests = Friend.objects.filter(
+                Q(user2_id=user.id), accepted=False
             )
-            friend_request_serializer = FriendSerializer(
-                friend_requests,
+            received_friend_request_serializer = FriendSerializer(
+                received_requests,
+                many=True,
+                context={
+                    "request": request,
+                },
+            )
+
+            # Retrieve friend requests sent by the user
+            sent_requests = Friend.objects.filter(Q(user1_id=user.id), accepted=False)
+            sent_friend_request_serializer = FriendSerializer(
+                sent_requests,
                 many=True,
                 context={
                     "request": request,
@@ -168,12 +229,24 @@ class ProfileViewSet(viewsets.ViewSet):
 
             user_serializer = UserSerializer(user)
 
+            # Get users pinned personal wishlists
+            my_pinned = Wishlist.objects.filter(user=user, pinned=True)
+            my_pinned_serializer = WishlistSerializer(my_pinned, many=True)
+
+            # Get users pinned friend wishlists
+            pinned_friends = Pin.objects.filter(user=user)
+            pinned_friend_serializer = PinSerializer(pinned_friends, many=True)
+
             # Combine all serialized data into a single response
             response_data = {
                 "user": user_serializer.data,
+                "profile": profile_data,
                 "wishlists": wishlist_serializer.data,
                 "friends": friend_serializer.data,
-                "friend_requests": friend_request_serializer.data,
+                "received_requests": received_friend_request_serializer.data,
+                "sent_requests": sent_friend_request_serializer.data,
+                "my_pinned_lists": my_pinned_serializer.data,
+                "friend_pins": pinned_friend_serializer.data,
             }
 
             return Response(response_data)
@@ -261,6 +334,17 @@ class ProfileViewSet(viewsets.ViewSet):
             # Retrieve the user based on the primary key (pk)
             user = User.objects.get(pk=pk)
 
+            # Try to retrieve the user's profile instance
+            try:
+                profile = Profile.objects.get(user=user)
+                profile_serializer = ProfileSerializer(
+                    profile, context={"request": request}
+                )
+                profile_data = profile_serializer.data
+            except Profile.DoesNotExist:
+                profile = None
+                profile_data = {}
+
             # Retrieve wishlists associated with the user
             wishlists = Wishlist.objects.filter(user=user, private=False)
             wishlist_serializer = WishlistSerializer(wishlists, many=True)
@@ -286,6 +370,7 @@ class ProfileViewSet(viewsets.ViewSet):
             # Combine all serialized data into a single response
             response_data = {
                 "user": user_serializer.data,
+                "profile": profile_data,
                 "wishlists": wishlist_serializer.data,
                 "friends": friend_serializer.data,
             }
@@ -297,3 +382,143 @@ class ProfileViewSet(viewsets.ViewSet):
 
         except Exception as ex:
             return HttpResponseServerError(str(ex))
+
+    def create(self, request):
+        """
+        @api {POST} /profile POST new profile
+        @apiName CreateProfile
+        @apiGroup Profile
+
+        @apiHeader {String} Authorization Auth token
+        @apiHeaderExample {String} Authorization
+            Token 9ba45f09651c5b0c404f37a2d2572c026c146611
+
+        @apiParam {String} bio Short biography of the user
+        @apiParam {String} [birthday] Birthday of the user (optional)
+        @apiParam {String} [address] Address of the user (optional)
+        @apiParam {String} [image] Base64-encoded image data of the user (optional)
+        @apiParamExample {json} Input
+            {
+                "bio": "A short biography of the user",
+                "birthday": "YYYY-MM-DD",
+                "address": "User address",
+                "image": "base64_encoded_image_data"
+            }
+
+        @apiSuccess (201) {Object} profile Created profile
+        @apiSuccess (201) {id} profile.id Profile Id
+        @apiSuccess (201) {String} profile.bio Short biography of the user
+        @apiSuccess (201) {String} [profile.birthday] Birthday of the user
+        @apiSuccess (201) {String} [profile.address] Address of the user
+        @apiSuccess (201) {String} [profile.image] URL to the profile image (if uploaded)
+            {
+                "id": 11,
+                "user": 1,
+                "bio": "A short biography of the user",
+                "birthday": "2024-05-10",
+                "address": "123 Main Street, Aurora Springs, CA 90210",
+                "image": "/media/profile/user_image-36d6c934-7619-4048-afb1-c43c970fe95c.png"
+            }
+        """
+        user = request.auth.user
+        new_profile = Profile()
+        new_profile.bio = request.data.get("bio")
+        new_profile.birthday = request.data.get("birthday")
+        new_profile.address = request.data.get("address")
+        new_profile.user = user
+
+        if "image" in request.data:
+            image_data = request.data["image"]
+            format, imgstr = image_data.split(";base64,")
+            ext = format.split("/")[-1]
+            image_data = ContentFile(
+                base64.b64decode(imgstr), name=f"user_image-{uuid.uuid4()}.{ext}"
+            )
+            new_profile.image = image_data
+        try:
+            new_profile.save()
+
+            serializer = ProfileSerializer(new_profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None):
+        """
+        Update the user's profile.
+
+        @api {PUT} /profile/:id Update User Profile
+        @apiName UpdateUserProfile
+        @apiGroup Profiles
+        @apiHeader {String} Authorization Auth token
+        @apiHeaderExample {String} Authorization: Token d74b97fbe905134520bb236b0016703f50380dcf
+        @apiParam {Number} pk User's unique ID.
+
+        @apiParam {String} [bio] Short biography of the user (optional)
+        @apiParam {String} [birthday] Birthday of the user (optional)
+        @apiParam {String} [address] Address of the user (optional)
+        @apiParam {String} [image] Base64-encoded image data of the user (optional)
+        @apiParamExample {json} Input
+            {
+                "bio": "Updated biography",
+                "birthday": "YYYY-MM-DD",
+                "address": "Updated address",
+                "image": "base64_encoded_image_data"
+            }
+
+        @apiSuccess {Object} profile Updated profile
+        @apiSuccess {id} profile.id Profile Id
+        @apiSuccess {String} profile.bio Short biography of the user
+        @apiSuccess {String} [profile.birthday] Birthday of the user
+        @apiSuccess {String} [profile.address] Address of the user
+        @apiSuccess {String} [profile.image] URL to the profile image (if uploaded)
+            {
+                "id": 11,
+                "user": 1,
+                "bio": "Updated biography",
+                "birthday": "YYYY-MM-DD",
+                "address": "Updated address",
+                "image": "/media/profile/user_image-36d6c934-7619-4048-afb1-c43c970fe95c.png"
+            }
+        """
+
+        try:
+            profile = Profile.objects.get(pk=pk)
+
+            # Update profile fields if provided in request data
+            profile.bio = request.data.get("bio")
+            profile.birthday = request.data.get("birthday")
+            profile.address = request.data.get("address")
+
+            if "image" in request.data:
+                image_data = request.data["image"]
+                if image_data.startswith("data:image"):  # Base64 encoded image
+                    format, imgstr = image_data.split(";base64,")
+                    ext = format.split("/")[-1]
+                    new_image_data = ContentFile(
+                        base64.b64decode(imgstr),
+                        name=f"user_image-{uuid.uuid4()}.{ext}",
+                    )
+
+                    # Delete old profile image from storage if exists
+                    if profile.image:
+                        default_storage.delete(profile.image.name)
+
+                    profile.image = new_image_data
+                else:
+                    # No need to update the image in this case
+                    pass
+
+            profile.save()
+
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        except Exception as e:
+            return HttpResponseServerError(str(e))
