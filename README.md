@@ -1,6 +1,6 @@
-# WishLinker
+# WishLinker API
 
-WishLinker is a Django API designed to manage wishlists. This project serves as the backend for the WishLinker application, providing RESTful endpoints to handle the core functionalities.
+This repository is a Django API designed to manage wishlists. This project serves as the backend for the WishLinker application, providing RESTful endpoints to handle the core functionalities.
 
 ## Notes
 
