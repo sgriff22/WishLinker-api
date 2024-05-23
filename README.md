@@ -1,5 +1,7 @@
 # WishLinker
 
+WishLinker is a Django API designed to manage wishlists. This project serves as the backend for the WishLinker application, providing RESTful endpoints to handle the core functionalities.
+
 ## Notes
 
 The client-side repository for this API can be found [here](https://github.com/sgriff22/WishLinker-client).
@@ -10,15 +12,55 @@ The client-side repository for this API can be found [here](https://github.com/s
 
 ## Getting Started
 
-1. Clone this repository and `cd` to the project directory
-2. Run `pipenv shell`
-3. Run `pipenv install`
-4. Run `./seed_database` to create all the tables and load fixtures to database
-5. Open the project directory in VS Code
-6. Press <kbd>⌘</kbd><kbd>SHIFT</kbd><kbd>P</kbd> (Mac), or <kbd>Ctrl</kbd><kbd>SHIFT</kbd><kbd>P</kbd> (Windows) to open the Command Palette, and select "Python: Select Interpreter".
-7. Search for "wish" and select the interpreter that starts with those characters. There should only be one to choose from.
-8. Start the debugger
-   1. Mac: **Shift+Option+D**
-   2. Windows: **Shift+Alt+D**
-9. Verify that the process starts with no exceptions
-10. If you haven't already, go to the client-side repository and follow the steps to open the site.
+Follow these steps to set up the project on your local machine:
+
+1. **Clone the repository and navigate to the project directory:**
+
+    ```sh
+    git clone <repository-url>
+    cd <project-directory>
+    ```
+    - Replace `<repository-url>` with the actual URL of this repository.
+    - Replace `<project-directory>` with the name of the directory created by cloning this repository.
+
+2. **Activate the virtual environment using Pipenv:**
+
+    ```sh
+    pipenv shell
+    ```
+
+3. **Install the project dependencies:**
+
+    ```sh
+    pipenv install
+    ```
+
+4. **Install additional required packages:**
+
+    ```sh
+    pip install django-safedelete
+    pipenv install pillow
+    ```
+
+5. **Set up the database:**
+
+    ```sh
+    ./seed_database.sh
+    ```
+7. **Open the project directory in VS Code**
+
+8. **Open the Command Palette:**
+    - Mac: Press <kbd>⌘</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd>
+    - Windows: Press <kbd>Ctrl</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd>
+
+9. **Select Python Interpreter:**
+    - In the Command Palette, type and select `Python: Select Interpreter`.
+    - Search for `wish` and select the interpreter that starts with those characters. There should only be one to choose from.
+
+10. **Start the Debugger:**
+    - Mac: Press <kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>D</kbd>
+    - Windows: Press <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>D</kbd>
+
+11. Ensure that the process starts with no exceptions.
+
+12. If you haven't already, go to the [client-side repository](https://github.com/sgriff22/WishLinker-client) and follow the steps to open the site.
